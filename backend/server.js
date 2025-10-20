@@ -12,15 +12,20 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Firebase Admin initialization (using service account file if present)
+// Firebase Admin initialization (env-var JSON or local file)
 try {
-  const serviceAccountPath = path.join(__dirname, 'firebase-service-account.json');
-  if (fs.existsSync(serviceAccountPath) && !admin.apps.length) {
-    const serviceAccount = require(serviceAccountPath);
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount)
-    });
-    console.log('Firebase Admin initialized');
+  if (!admin.apps.length && process.env.FIREBASE_SERVICE_ACCOUNT) {
+    const sa = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+    admin.initializeApp({ credential: admin.credential.cert(sa) });
+    console.log('Firebase Admin initialized from env');
+  }
+  if (!admin.apps.length) {
+    const serviceAccountPath = path.join(__dirname, 'firebase-service-account.json');
+    if (fs.existsSync(serviceAccountPath)) {
+      const serviceAccount = require(serviceAccountPath);
+      admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
+      console.log('Firebase Admin initialized from file');
+    }
   }
 } catch (e) {
   console.warn('Firebase Admin initialization skipped:', e?.message || e);
@@ -47,7 +52,7 @@ async function verifyFirebaseToken(req, res, next) {
 }
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://sohamUlwe305:Soham305Ulwe@clusterulwe.49hjd.mongodb.net/course_enrollment?retryWrites=true&w=majority&appName=clusterUlwe';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://sohamUlwe305:Soham305Ulwe@clusterulwe.49hjd.mongodb.net/propertypilot?retryWrites=true&w=majority&appName=clusterUlwe';
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
