@@ -51,8 +51,8 @@ async function verifyFirebaseToken(req, res, next) {
   }
 }
 
-// MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://sohamUlwe305:Soham305Ulwe@clusterulwe.49hjd.mongodb.net/propertypilot?retryWrites=true&w=majority&appName=clusterUlwe';
+// MongoDB Connection (default uses same cluster, separate DB for this project)
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://sohamUlwe305:Soham305Ulwe@clusterulwe.49hjd.mongodb.net/course_enrollment?retryWrites=true&w=majority&appName=clusterUlwe';
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
