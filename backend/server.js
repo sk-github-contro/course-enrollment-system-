@@ -67,13 +67,15 @@ app.use('/api/courses', require('./routes/courses'));
 app.use('/api/enroll', verifyFirebaseToken, require('./routes/enrollments'));
 app.use('/api/auth', require('./routes/auth'));
 
-// Serve static files from Angular app in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'client/dist/client')));
-  
+// Serve static files from Angular app only if built and explicitly enabled
+const clientDistPath = path.join(__dirname, '..', 'client', 'dist', 'client', 'browser');
+if (process.env.SERVE_CLIENT === 'true' && fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client/dist/client', 'index.html'));
+    res.sendFile(path.join(clientDistPath, 'index.html'));
   });
+} else {
+  console.log('Client serving disabled or dist not found; API-only mode.');
 }
 
 const PORT = process.env.PORT || 5001;

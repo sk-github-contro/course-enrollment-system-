@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EnrolledCourse, Enrollment } from '../models/course.model';
+import { environment } from '../../environments/environment';
 import { FirebaseAuthService } from './firebase-auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EnrollmentService {
-  private apiUrl = 'http://localhost:5001/api';
+  private apiUrl = environment.apiBaseUrl;
 
   constructor(private http: HttpClient, private auth: FirebaseAuthService) { }
 

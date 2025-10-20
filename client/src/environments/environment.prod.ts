@@ -1,5 +1,7 @@
 export const environment = {
   production: true,
+  // Replace with your Render backend URL after deploy
+  apiBaseUrl: 'https://<your-render-service>.onrender.com/api',
   firebase: {
     apiKey: "AIzaSyCcqONJRl8A83ALpWNe7fUBRboOtmNz0Rk",
     authDomain: "course-enrollment-system-2ba23.firebaseapp.com",
