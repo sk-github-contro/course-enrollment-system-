@@ -1,0 +1,25 @@
+{
+  "name": "course-enrollment-system",
+  "version": "1.0.0",
+  "description": "A MEAN stack course enrollment system",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "cd backend && node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && nodemon server.js",
+    "client": "cd client && npm start",
+    "build": "cd client && ng build",
+    "install-all": "npm install && cd backend && npm install && cd ../client && npm install",
+    "seed": "cd backend && node seedData.js",
+    "setup": "node setup.js"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": ["mean", "course", "enrollment", "education"],
+  "author": "Your Name",
+  "license": "MIT"
+}

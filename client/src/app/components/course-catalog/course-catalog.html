@@ -1,0 +1,48 @@
+<div class="course-catalog">
+  <div class="header">
+    <h1>Course Catalog</h1>
+    <p>Discover and enroll in amazing courses</p>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    <p>Loading courses...</p>
+  </div>
+
+  <div class="courses-grid" *ngIf="!loading">
+    <div class="course-card" *ngFor="let course of courses">
+      <div class="course-header">
+        <h3>{{ course.title }}</h3>
+        <span class="category">{{ course.category }}</span>
+      </div>
+      
+      <div class="course-info">
+        <p class="instructor">
+          <strong>Instructor:</strong> {{ course.instructor }}
+        </p>
+        <p class="duration">
+          <strong>Duration:</strong> {{ course.duration }}
+        </p>
+        <p class="price" *ngIf="course.price">
+          <strong>Price:</strong> ${{ course.price }}
+        </p>
+        <p class="description" *ngIf="course.description">
+          {{ course.description }}
+        </p>
+      </div>
+
+      <div class="course-actions">
+        <button 
+          class="enroll-btn"
+          [class.enrolled]="isEnrolled(course.id)"
+          [disabled]="isEnrolled(course.id)"
+          (click)="enrollInCourse(course)">
+          {{ isEnrolled(course.id) ? 'Enrolled' : 'Enroll' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-courses" *ngIf="!loading && courses.length === 0">
+    <p>No courses available at the moment.</p>
+  </div>
+</div>

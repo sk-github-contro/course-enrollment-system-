@@ -1,0 +1,64 @@
+<div class="student-dashboard">
+  <div class="header">
+    <h1>My Dashboard</h1>
+    <div class="user-info" *ngIf="currentUser">
+      <p>Welcome back, {{ currentUser.firstName }} {{ currentUser.lastName }}!</p>
+      <div class="stats">
+        <div class="stat-item">
+          <span class="stat-number">{{ getTotalEnrollments() }}</span>
+          <span class="stat-label">Enrolled Courses</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="loading" *ngIf="loading">
+    <p>Loading your courses...</p>
+  </div>
+
+  <div class="enrolled-courses" *ngIf="!loading">
+    <h2>My Enrolled Courses</h2>
+    
+    <div class="courses-grid" *ngIf="enrolledCourses.length > 0">
+      <div class="course-card" *ngFor="let enrolledCourse of enrolledCourses">
+        <div class="course-header">
+          <h3>{{ enrolledCourse.course.title }}</h3>
+          <span class="category">{{ enrolledCourse.course.category }}</span>
+        </div>
+        
+        <div class="course-info">
+          <p class="instructor">
+            <strong>Instructor:</strong> {{ enrolledCourse.course.instructor }}
+          </p>
+          <p class="duration">
+            <strong>Duration:</strong> {{ enrolledCourse.course.duration }}
+          </p>
+          <p class="enrollment-date">
+            <strong>Enrolled:</strong> {{ getEnrollmentDate(enrolledCourse.enrollment.enrolledAt) }}
+          </p>
+          <p class="progress" *ngIf="enrolledCourse.enrollment.progress !== undefined">
+            <strong>Progress:</strong> {{ enrolledCourse.enrollment.progress }}%
+          </p>
+        </div>
+
+        <div class="course-actions">
+          <button 
+            class="continue-btn"
+            (click)="continueLearning(enrolledCourse)">
+            Continue Learning
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="no-courses" *ngIf="enrolledCourses.length === 0">
+      <div class="empty-state">
+        <h3>No enrolled courses yet</h3>
+        <p>Browse our course catalog and enroll in courses to get started!</p>
+        <button class="browse-btn" routerLink="/catalog">
+          Browse Courses
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
