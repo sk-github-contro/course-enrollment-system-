@@ -103,6 +103,27 @@
   }
 }
 
+/* Material toolbar spacing so title and links don't look stuck together */
+mat-toolbar {
+  display: flex;
+  align-items: center;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  a[routerLink] {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 16px;
+  }
+
+  .welcome {
+    margin-left: 16px;
+    margin-right: 8px;
+  }
+}
+
 @media (max-width: 768px) {
   .app .navbar .nav-container {
     padding: 0 1rem;
