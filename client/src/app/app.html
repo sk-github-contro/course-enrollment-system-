@@ -1,24 +1,15 @@
 <div class="app">
-  <nav class="navbar">
-    <div class="nav-container">
-      <div class="nav-brand">
-        <h1>{{ title }}</h1>
-      </div>
-      
-      <div class="nav-links">
-        <a routerLink="/catalog" routerLinkActive="active">Course Catalog</a>
-        <a routerLink="/dashboard" routerLinkActive="active" *ngIf="authService.isAuthenticated()">My Dashboard</a>
-      </div>
-      
-      <div class="nav-auth">
-        <a routerLink="/login" *ngIf="!authService.isAuthenticated()">Login</a>
-        <div class="user-menu" *ngIf="authService.isAuthenticated()">
-          <span>Welcome, {{ authService.getCurrentUser()?.firstName || authService.getCurrentUser()?.displayName || 'User' }}</span>
-          <button (click)="logout()" class="logout-btn">Logout</button>
-        </div>
-      </div>
-    </div>
-  </nav>
+  <mat-toolbar color="primary">
+    <span>{{ title }}</span>
+    <span class="spacer"></span>
+    <a routerLink="/catalog" routerLinkActive="active">Course Catalog</a>
+    <a routerLink="/dashboard" routerLinkActive="active" *ngIf="authService.isAuthenticated()">My Dashboard</a>
+    <a routerLink="/login" *ngIf="!authService.isAuthenticated()">Login</a>
+    <ng-container *ngIf="authService.isAuthenticated()">
+      <span class="welcome">Welcome, {{ authService.getCurrentUser()?.firstName || authService.getCurrentUser()?.displayName || 'User' }}</span>
+      <button mat-button (click)="logout()">Logout</button>
+    </ng-container>
+  </mat-toolbar>
 
   <main class="main-content">
     <router-outlet></router-outlet>
