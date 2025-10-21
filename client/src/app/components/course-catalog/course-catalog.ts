@@ -44,8 +44,12 @@ export class CourseCatalog implements OnInit {
 
   loadCourses() {
     this.loading = true;
+    this.courses = []; // Clear previous courses
+    console.log('Loading courses from:', this.courseService['apiUrl']); // Debug log
+    
     this.courseService.getCourses().subscribe({
       next: (courses) => {
+        console.log('Courses loaded successfully:', courses.length, 'courses');
         this.courses = courses;
         this.checkEnrollments();
         this.loading = false;
@@ -53,6 +57,13 @@ export class CourseCatalog implements OnInit {
       },
       error: (error) => {
         console.error('Error loading courses:', error);
+        console.error('Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          url: error.url
+        });
+        this.courses = []; // Ensure courses array is empty on error
         this.loading = false;
         this.cdr.detectChanges();
       }
