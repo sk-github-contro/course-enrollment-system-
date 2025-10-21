@@ -27,37 +27,31 @@ A full-stack MEAN application for course enrollment, with Firebase Authenticatio
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/sk-github-contro/course-enrollment-system-.git
    cd course-enrollment-system
    ```
 
 2. **Install dependencies**
    ```bash
-   # Install backend dependencies
-   npm install
-   
-   # Install frontend dependencies
-   cd client && npm install && cd ..
+   # Install all dependencies (root, backend, frontend)
+   npm run install-all
    ```
 
-3. **MongoDB Setup**
-   The application is configured for your MongoDB Atlas cluster by default. To override:
-   - Set `MONGODB_URI` when starting the backend.
-   - Backend default port: `5001`.
+3. **Firebase Setup**
+   - Create a Firebase project and enable Authentication (Email/Password + Google)
+   - Copy your Firebase web config to `client/src/environments/environment.ts`
+   - Add `localhost:4200` to Firebase Authorized domains
 
 4. **Quick Start**
    ```bash
-   # Install all
-   npm run install-all
-
    # Seed sample courses (optional)
    cd backend && npm run seed && cd ..
 
    # Start backend (port 5001)
-   cd backend && MONGODB_URI="<your mongo uri optional>" npm start
+   cd backend && npm start
 
-   # Start frontend
-   cd ../client && npm start  # http://localhost:4200
+   # Start frontend (new terminal)
+   cd client && npm start  # http://localhost:4200
    ```
 
 ## Running the Application
@@ -83,15 +77,17 @@ Frontend: http://localhost:4200
 ## API Endpoints
 
 ### Authentication
-Handled by Firebase on the frontend. Backend uses Firebase UID for enrollments; no JWT endpoints.
+- Firebase Authentication (Email/Password, Google Sign-In)
+- Backend verifies Firebase ID tokens for enrollment endpoints
+- No JWT endpoints; uses Firebase UID for user identification
 
 ### Courses
 - `GET /api/courses` - Get all available courses
 - `GET /api/courses/:id` - Get a specific course
 
-### Enrollments
-- `POST /api/enroll` - Enroll in a course
-- `GET /api/enroll/my-courses` - Get user's enrolled courses
+### Enrollments (Protected - requires Firebase ID token)
+- `POST /api/enroll` - Enroll in a course (requires Authorization: Bearer <token>)
+- `GET /api/enroll/my-courses?userId=<uid>` - Get user's enrolled courses
 - `GET /api/enroll/check/:userId/:courseId` - Check enrollment status
 
 ## Sample Data
@@ -99,8 +95,7 @@ Handled by Firebase on the frontend. Backend uses Firebase UID for enrollments; 
 The application comes with sample data including:
 
 ### Sample Users
-- **Email**: john@example.com, **Password**: password123
-- **Email**: jane@example.com, **Password**: password123
+Create accounts via Firebase Authentication (Email/Password or Google Sign-In)
 
 ### Sample Courses
 - Introduction to Artificial Intelligence
@@ -112,30 +107,47 @@ The application comes with sample data including:
 
 ## Usage
 
-1. **Register/Login**: Create an account or use the demo credentials
+1. **Register/Login**: Create an account via Firebase (Email/Password or Google)
 2. **Browse Courses**: View the course catalog with course details
-3. **Enroll**: Click "Enroll" on any course to enroll
-4. **Dashboard**: View your enrolled courses in the dashboard
+3. **Enroll**: Click "Enroll" → confirm in dialog → see success snackbar
+4. **Dashboard**: View your enrolled courses, dates, and totals
 5. **Continue Learning**: Access your courses from the dashboard
+
+## Deployment
+
+### Backend (Render)
+- Root Directory: `backend`
+- Build Command: `npm install`
+- Start Command: `node server.js`
+- Environment Variables: `PORT`, `MONGODB_URI`, `FIREBASE_SERVICE_ACCOUNT`
+
+### Frontend (Vercel)
+- Root Directory: `client`
+- Build Command: `npm run build`
+- Output Directory: `dist/client/browser`
+- Update `environment.prod.ts` with your Render API URL
 
 ## Project Structure
 
 ```
 course-enrollment-system/
+├── backend/                # Node.js backend
+│   ├── models/            # MongoDB models
+│   ├── routes/            # Express.js routes
+│   ├── server.js          # Main server file
+│   ├── seedData.js        # Database seeding script
+│   └── package.json
 ├── client/                 # Angular frontend
 │   ├── src/
 │   │   ├── app/
 │   │   │   ├── components/ # Angular components
 │   │   │   ├── services/   # Angular services
+│   │   │   ├── guards/     # Route guards
 │   │   │   ├── models/     # TypeScript interfaces
 │   │   │   └── ...
-│   │   └── ...
-│   └── ...
-├── models/                 # MongoDB models
-├── routes/                 # Express.js routes
-├── server.js              # Main server file
-├── seedData.js            # Database seeding script
-└── package.json
+│   │   └── environments/   # Environment configs
+│   └── package.json
+└── package.json           # Root package.json
 ```
 
 ## Features Implemented
@@ -159,9 +171,9 @@ course-enrollment-system/
 - Continue Learning button
 
 ✅ **Authentication**
-- User registration and login
-- JWT token-based authentication
-- Protected routes
+- Firebase Authentication (Email/Password, Google Sign-In)
+- Protected routes with auth guards
+- Firebase ID token verification on backend
 - User session management
 
 ✅ **Backend API**
