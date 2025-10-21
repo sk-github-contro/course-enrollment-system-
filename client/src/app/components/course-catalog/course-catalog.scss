@@ -129,13 +129,73 @@
   .course-catalog {
     padding: 1rem;
 
+    .header {
+      margin-bottom: 2rem;
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      p {
+        font-size: 1rem;
+      }
+    }
+
     .courses-grid {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
 
-    .header h1 {
-      font-size: 2rem;
+    .course-card {
+      padding: 1rem;
+
+      .course-header h3 {
+        font-size: 1.2rem;
+      }
+
+      .course-actions .enroll-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .course-catalog {
+    padding: 0.5rem;
+
+    .header {
+      margin-bottom: 1.5rem;
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      p {
+        font-size: 0.9rem;
+      }
+    }
+
+    .courses-grid {
+      gap: 1rem;
+    }
+
+    .course-card {
+      padding: 0.75rem;
+
+      .course-header h3 {
+        font-size: 1.1rem;
+      }
+
+      .course-info p {
+        font-size: 0.9rem;
+      }
+
+      .course-actions .enroll-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.85rem;
+      }
     }
   }
 }
