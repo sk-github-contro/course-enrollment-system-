@@ -45,29 +45,37 @@ export class CourseCatalog implements OnInit {
   loadCourses() {
     this.loading = true;
     this.courses = []; // Clear previous courses
-    console.log('Loading courses from:', this.courseService['apiUrl']); // Debug log
     
-    this.courseService.getCourses().subscribe({
-      next: (courses) => {
-        console.log('Courses loaded successfully:', courses.length, 'courses');
-        this.courses = courses;
-        this.checkEnrollments();
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error('Error loading courses:', error);
-        console.error('Error details:', {
-          status: error.status,
-          statusText: error.statusText,
-          message: error.message,
-          url: error.url
-        });
-        this.courses = []; // Ensure courses array is empty on error
-        this.loading = false;
-        this.cdr.detectChanges();
-      }
-    });
+    // Add retry mechanism for mobile
+    let retryCount = 0;
+    const maxRetries = 3;
+    
+    const attemptLoad = () => {
+      this.courseService.getCourses().subscribe({
+        next: (courses) => {
+          this.courses = courses;
+          this.checkEnrollments();
+          this.loading = false;
+          this.cdr.detectChanges();
+        },
+        error: (error) => {
+          retryCount++;
+          if (retryCount < maxRetries) {
+            // Retry after 1 second
+            setTimeout(() => {
+              attemptLoad();
+            }, 1000);
+          } else {
+            // Final attempt failed, show error state
+            this.courses = [];
+            this.loading = false;
+            this.cdr.detectChanges();
+          }
+        }
+      });
+    };
+    
+    attemptLoad();
   }
 
   checkEnrollments() {

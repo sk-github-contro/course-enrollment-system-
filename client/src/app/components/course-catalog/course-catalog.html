@@ -44,9 +44,9 @@
 
   <div class="no-courses" *ngIf="!loading && courses.length === 0">
     <div class="empty-state">
-      <h3>No courses available</h3>
-      <p>Please check your internet connection and try refreshing the page.</p>
-      <button class="refresh-btn" (click)="loadCourses()">Refresh</button>
+      <h3>Unable to load courses</h3>
+      <p>This might be a temporary network issue. Please try again.</p>
+      <button class="refresh-btn" (click)="loadCourses()">Try Again</button>
     </div>
   </div>
 </div>

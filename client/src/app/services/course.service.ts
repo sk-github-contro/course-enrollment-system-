@@ -13,7 +13,13 @@ export class CourseService {
   constructor(private http: HttpClient) { }
 
   getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(`${this.apiUrl}/courses`);
+    return this.http.get<Course[]>(`${this.apiUrl}/courses`, {
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      timeout: 10000 // 10 second timeout
+    });
   }
 
   getCourse(id: string): Observable<Course> {
